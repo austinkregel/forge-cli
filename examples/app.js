@@ -1,5 +1,13 @@
-let specialTrain = require('../index');
+let Application = require('../index');
 
-specialTrain.register([
-    './src/Commands/Main'
-]);
+Application.command('http:post {url} {--https}', function() {
+    console.log(this)
+}).describe('this is a command');
+
+Application.register(__dirname, [
+    '../src/Commands/List'
+])
+
+const args =  Object.assign({}, { args: process.argv });
+
+Application.start(args);
