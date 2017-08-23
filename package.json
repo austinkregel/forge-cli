@@ -1,0 +1,12 @@
+{
+  "name": "artisan-node",
+  "version": "0.0.1",
+  "description": "A simple cli framework to provide an easy interface to register commands for cli apps",
+  "main": "index.js",
+  "repository": "https://github.com/austinkregel/special-train.git",
+  "author": "Austin Kregel",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^3.2.2"
+  }
+}
