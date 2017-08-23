@@ -34,8 +34,7 @@ If you have a webhook that you want to post to you might do something like:
 
 ```javascript
 'use strict';
-let App = require('./src/Application'),
-    Application = new App(),
+let Application = require('./index');
     // I'm using axios to make an http request, you can use anything in this closure,
     // I just like axios for http requests...
     axios = require('axios');
