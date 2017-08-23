@@ -1,4 +1,4 @@
-let Application = require('../index');
+let Application = require('forge-cli');
 
 Application.command('http:post {url} {--https}', function() {
     console.log(this)
