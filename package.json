@@ -1,5 +1,5 @@
 {
-  "name": "artisan-node",
+  "name": "forge-cli",
   "version": "0.0.1",
   "description": "A simple cli framework to provide an easy interface to register commands for cli apps",
   "main": "index.js",
