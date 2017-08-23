@@ -1,11 +1,9 @@
-# What is this repo?
+# What is forge-cli?
 It's the beginning of a simple cli framework heavily inspired by [Laravel Artisan](https://laravel.com/docs/master/artisan). Specifically the way they handle anonymous cli commands and registering new commands. I'm not saying the code base is based upon it. Just the way you interact with everything.
 
 ## So how do I use it?
 
 For starters this repo is not on an NPM repo just yet that's mainly because I haven't figured out how to do that yet... But I will.
-
-And before you ask no it won't be registered under special-train... :smile:
 
 ## docs
 
@@ -50,8 +48,10 @@ Application.command('http:post {url} {--https}', function() {
         })
 });
 
+let args = Object.assign({}, {args: process.argv});
+
 // This "starts" the application
-Application.start(process.argv);
+Application.start(args);
 ```
 Then to use this command you can just type (in your console)
 
