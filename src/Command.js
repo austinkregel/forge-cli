@@ -22,24 +22,17 @@ module.exports = class Command {
         let name = this.name = this.signature.split(' ')[0]
 
         // grab all optional options
-        this.signature.replace(/\{\-\-(.*?)\s*\}/g, (match) => {
-            options.push(match)
-        })
-        // grab all the non-optional values.
-        .replace(/\s\-\-(.*)\s/g, (match) => {
-            options.push(match.trim())
-        })
-        // grab the arguments.
-        .replace(/\{\s*[^\-\-](.*?)\s*\}/g, (match) => {
-            let arg = this.stripTags(match);
-            this.arguments[arg[0] || arg] = arg[1] || null;
-        })
+        let that = this;
+        this.signature.split(' ')
+            .map(part => {
+                part = that.stripTags(part);
+                if(part[0].match(/\-\-(.*?)/g)) {
+                    this.options[part[0] || part] = part[1] || false;
+                } else {
+                    this.arguments[part[0] || part] = part[1] || null;
+                }
+            })
 
-        // Loop through the current options and parse/set the defaults
-        options.forEach((match) => {
-            let optionName = this.stripTags(match);
-            this.options[optionName[0] || optionName] = optionName[1] || false;
-        })
         return {
             name,
             options: this.options,
@@ -65,28 +58,18 @@ module.exports = class Command {
     call(sysArgs) {
         // splice to remove the root part of the given command
         let tmpArgs = this.signature.split(' ').splice(1);
-        if(sysArgs.hasOwnProperty('splice')) {
-            sysArgs = sysArgs.splice(1)
-        }
 
-        this.systemArguments = sysArgs;
+        this.systemArguments = sysArgs.join(' ');
 
-        // This should match arguments with the given system passed argument...
-        // I know this will break... I know it will... I'm just messing with you...
-        Object.keys(this.arguments).forEach((argument, i) => {
-            sysArgs.forEach(sysArg => {
-                if (sysArg.match(/^(?![\-]+)/g) !== null) {
-                    this.arguments[argument] = sysArg
-                }
-            })
-        });
-        // Some as above, but for the options...
-        Object.keys(this.options).forEach((option) => {
-            sysArgs.forEach(sysArg => {
-                if(sysArg.match('--' + option)) {
-                    this.options[option] = this.stripTags(sysArg)[1] || true;
-                }
-            })
+        let argCount = 0;
+        sysArgs.forEach((part, i)=> {
+            let part_ = this.stripTags(part);
+            if(part.match(/\-\-(.*?)/g)) {
+                this.options[part_[0] || part_] = part_[1] || true;
+            } else {
+                this.arguments[Object.keys(this.arguments)[argCount]] = part_;
+                argCount++;
+            }
         });
 
         this.handle.apply(this, Object.assign(this.options, this.arguments))
