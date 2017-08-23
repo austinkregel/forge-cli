@@ -59,3 +59,6 @@ Then to use this command you can just type (in your console)
 `node index.js http:post example.com` or `node index.js http:post example.com --https`
 And the url's they'll hit are http://example.com and https://example.com respectively.
 
+### Helpers?
+
+You have full access to the [inquirer](https://github.com/SBoudrias/Inquirer.js) library via `this.inquirer` in your command's closure.
