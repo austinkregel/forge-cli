@@ -19,6 +19,7 @@ module.exports = class Application {
                 this.stripTags = super.stripTags
                 this.argument = super.argument;
                 this.option = super.option;
+                this.describe = super.describe
                 this.signature = commandName;
             }
         }(commandName);
@@ -28,9 +29,20 @@ module.exports = class Application {
         return tmpCmp;
     }
 
+    register(directory, arrayOfCommands) {
+        if (!Array.isArray(arrayOfCommands)) {
+            arrayOfCommands = [arrayOfCommands]
+        }
+
+        arrayOfCommands.forEach(command => {
+            this.registerCommand(directory + "/" + command + ".js")
+        })
+    }
+
     registerCommand(command) {
         if (!fs.lstatSync(command).isDirectory()) {
-            let cmd = new require(command.replace(/\.js$/, ''));
+            command = new require(command.replace(/\.js$/, ''));
+            let cmd = new command();
             this.commands[cmd.name] = cmd
         }
     }
@@ -45,8 +57,9 @@ module.exports = class Application {
 
         this.parseArgs(args);
 
-        if(!this.executing){
-            throw new Error('No command is registered by that signature!')
+        if (!this.executing) {
+            this.commands['list'].call(this.commands);
+            return;
         }
 
         this.executing.call(args);
