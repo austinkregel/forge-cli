@@ -1,5 +1,5 @@
 # What is this repo?
-It's the beginning of a simple cli framework heavily inspired by [Laravel](https://laravel.com)'s command system. Specifically the way they handle anonymous cli commands and registering new commands. I'm not saying the code base is based upon it. Just the way you interact with everything.
+It's the beginning of a simple cli framework heavily inspired by [Laravel Artisan](https://laravel.com/docs/master/artisan). Specifically the way they handle anonymous cli commands and registering new commands. I'm not saying the code base is based upon it. Just the way you interact with everything.
 
 ## So how do I use it?
 
