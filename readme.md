@@ -32,10 +32,10 @@ If you have a webhook that you want to post to you might do something like:
 
 ```javascript
 'use strict';
-let Application = require('./index');
+let Application = require('forge-cli');
     // I'm using axios to make an http request, you can use anything in this closure,
     // I just like axios for http requests...
-    axios = require('axios');
+let axios = require('axios');
 
 // Register your command
 Application.command('http:post {url} {--https}', function() {
