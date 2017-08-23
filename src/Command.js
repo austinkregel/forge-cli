@@ -13,7 +13,6 @@ module.exports = class Command {
         this.handle = () => {
             throw new Error('Default function')
         };
-
         return this.parseSignature()
     }
 
@@ -66,7 +65,11 @@ module.exports = class Command {
     call(sysArgs) {
         // splice to remove the root part of the given command
         let tmpArgs = this.signature.split(' ').splice(1);
-        sysArgs = sysArgs.splice(1)
+        if(sysArgs.hasOwnProperty('splice')) {
+            sysArgs = sysArgs.splice(1)
+        }
+
+        this.systemArguments = sysArgs;
 
         // This should match arguments with the given system passed argument...
         // I know this will break... I know it will... I'm just messing with you...
@@ -87,6 +90,10 @@ module.exports = class Command {
         });
 
         this.handle.apply(this, Object.assign(this.options, this.arguments))
+    }
+    describe(description){
+        this.description = description;
+        return this;
     }
 }
 
