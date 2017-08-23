@@ -48,7 +48,7 @@ module.exports = class Command {
      * Stips the tags that declare an option or an argument.
      */
     stripTags(text) {
-        return text.trim().replace(/[(^\{)|(\-{2})|(\}$)]+/g, '').split('=')
+        return text.trim().replace(/(^\{)|(\-{2})|(\}$)+/g, '').split('=')
     }
 
     argument(arg) {
