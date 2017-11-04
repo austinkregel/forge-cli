@@ -62,6 +62,6 @@ module.exports = class Application {
             return;
         }
 
-        this.executing.apply(this, args);
+        this.executing.call(args);
     }
 };
