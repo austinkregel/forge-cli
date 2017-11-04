@@ -15,16 +15,16 @@ module.exports = class Application {
             constructor() {
                 super(commandName);
                 this.handle = func;
-                this.call = super.call
-                this.stripTags = super.stripTags
+                this.call = super.call;
+                this.stripTags = super.stripTags;
                 this.argument = super.argument;
                 this.option = super.option;
-                this.describe = super.describe
+                this.describe = super.describe;
                 this.signature = commandName;
             }
         }(commandName);
 
-        this.commands[tmpCmp.name] = tmpCmp
+        this.commands[tmpCmp.name] = tmpCmp;
 
         return tmpCmp;
     }
@@ -62,6 +62,6 @@ module.exports = class Application {
             return;
         }
 
-        this.executing.call(args);
+        this.executing.apply(this, args);
     }
 };
