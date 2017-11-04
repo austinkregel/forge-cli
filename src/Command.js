@@ -17,7 +17,7 @@ module.exports = class Command {
     }
 
     parseSignature() {
-        let options = []
+        let options = [];
 
         let name = this.name = this.signature.split(' ')[0]
 
@@ -52,7 +52,11 @@ module.exports = class Command {
     }
 
     argument(arg) {
-        return this.arguments[arg] || null
+        if (!this.arguments[arg]) {
+            return null;
+        }
+
+        return this.arguments[arg][0];
     }
 
     call(sysArgs) {
@@ -78,8 +82,4 @@ module.exports = class Command {
         this.description = description;
         return this;
     }
-}
-
-// Application.register('signature', () => {
-//
-// }).describe('This is a thing that does cool stuff.')
+};
