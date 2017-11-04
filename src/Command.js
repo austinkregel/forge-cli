@@ -1,12 +1,9 @@
 const inquire = require('inquirer');
-module.exports.stripTags = (text) => {
-    "use strict";
-    return text.trim().replace(/[(^\{)|(\-{2})|(\}$)]+/g, '').split('=')
-};
-module.exports = class Command {
+
+class Command {
     constructor(signature) {
         this.signature = signature || '';
-        this.inquire = inquire;
+        this.inquirer = inquire;
         this.name = '';
         this.options = {};
         this.arguments = {};
@@ -16,6 +13,11 @@ module.exports = class Command {
         return this.parseSignature()
     }
 
+    /**
+     * Parse the signature of the command and return name, options, and arguments.
+     *
+     * @returns {{name: *, options: ({}|*), arguments: ({}|*)}}
+     */
     parseSignature() {
         let options = [];
 
@@ -25,13 +27,13 @@ module.exports = class Command {
         let that = this;
         this.signature.split(' ')
             .map(part => {
-                part = that.stripTags(part);
+                part = this.stripTags(part);
                 if(part[0].match(/\-\-(.*?)/g)) {
                     this.options[part[0] || part] = part[1] || false;
                 } else {
                     this.arguments[part[0] || part] = part[1] || null;
                 }
-            })
+            });
 
         return {
             name,
@@ -40,6 +42,12 @@ module.exports = class Command {
         }
     }
 
+    /**
+     * Check to see if an option exists, if it does return it's value. If not return false.
+     *
+     * @param option
+     * @returns {*|boolean}
+     */
     option(option) {
         return this.options[option] || false
     }
@@ -51,6 +59,12 @@ module.exports = class Command {
         return text.trim().replace(/(^\{)|(\-{2})|(\}$)+/g, '').split('=')
     }
 
+    /**
+     * Check to see if an argument exists, if it does return it. If not return null.
+     *
+     * @param arg
+     * @returns {*}
+     */
     argument(arg) {
         if (!this.arguments[arg]) {
             return null;
@@ -76,10 +90,17 @@ module.exports = class Command {
             }
         });
 
-        this.handle.apply(this, Object.assign(this.options, this.arguments))
+        this.handle.bind(this).apply( Object.assign(this.options, this.arguments))
     }
+
+    ask(questions, callback) {
+        inquire.prompt(questions).then(callback);
+    }
+
     describe(description){
         this.description = description;
         return this;
     }
-};
+}
+
+module.exports = Command;
