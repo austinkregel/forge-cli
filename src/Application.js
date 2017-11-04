@@ -58,7 +58,7 @@ module.exports = class Application {
         this.parseArgs(args);
 
         if (!this.executing) {
-            this.commands['list'].call(this.commands);
+            this.commands['list'].call([]);
             return;
         }
 
