@@ -16,11 +16,11 @@ module.exports = class List extends Command {
         this.description = 'This will list all commands registered with an application.'
         this.handle = () => {
             let id = 0;
-            for (let command in Application.commands){
+            for (let command in ForgeCli.commands){
                 table.push([
                     id ++,
-                    Application.commands[command].signature,
-                    Application.commands[command].description || ''
+                    ForgeCli.commands[command].signature,
+                    ForgeCli.commands[command].description || ''
                 ])
             }
             console.log(table.toString())
