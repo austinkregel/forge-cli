@@ -1,6 +1,6 @@
 const Command = new require('../Command');
-var Table = require('cli-table');
-var table = new Table({ head: ["id", "name", "description"] });
+let Table = require('cli-table');
+let table = new Table({ head: ["id", "name", "description"] });
 
 module.exports = class List extends Command {
     constructor() {
@@ -15,23 +15,15 @@ module.exports = class List extends Command {
         this.signature = 'list';
         this.description = 'This will list all commands registered with an application.'
         this.handle = () => {
-            let list = [];
-            for(let name in this.systemArguments) {
-                list.push(this.systemArguments[name])
-            }
-
-            let ids = [],
-                names = [],
-                descriptions= []
-            list.forEach((command, id)=> {
+            let id = 0;
+            for (let command in Application.commands){
                 table.push([
-                    id+1,
-                    command.signature,
-                    command.description || ''
+                    id ++,
+                    Application.commands[command].signature,
+                    Application.commands[command].description || ''
                 ])
-            });
+            }
             console.log(table.toString())
         }
-
     }
 };
