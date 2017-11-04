@@ -1,6 +1,6 @@
 {
   "name": "forge-cli",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A simple cli framework to provide an easy interface to register commands for cli apps",
   "main": "index.js",
   "repository": "https://github.com/austinkregel/special-train.git",
