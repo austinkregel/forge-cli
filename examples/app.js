@@ -6,7 +6,7 @@ Application.command('http:post {url} {--https}', function() {
 
 Application.register(__dirname, [
     '../src/Commands/List'
-])
+]);
 
 const args =  Object.assign({}, { args: process.argv });
 
