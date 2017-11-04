@@ -1,7 +1,7 @@
 let Application = require('forge-cli');
 
 Application.command('http:post {url} {--https}', function() {
-    console.log(this)
+    console.log(this.argument('url'))
 }).describe('this is a command');
 
 Application.register(__dirname, [
