@@ -1,16 +1,13 @@
 const inquire = require('inquirer');
 
-class Command {
+module.exports = class Command {
     constructor(signature) {
         this.signature = signature || '';
         this.inquirer = inquire;
         this.name = '';
         this.options = {};
         this.arguments = {};
-        this.handle = () => {
-            throw new Error('Default function')
-        };
-        return this.parseSignature()
+        this.parseSignature()
     }
 
     /**
@@ -24,7 +21,6 @@ class Command {
         let name = this.name = this.signature.split(' ')[0]
 
         // grab all optional options
-        let that = this;
         this.signature.split(' ')
             .map(part => {
                 part = this.stripTags(part);
@@ -90,7 +86,9 @@ class Command {
             }
         });
 
-        this.handle.bind(this).apply( Object.assign(this.options, this.arguments))
+        if (this.handle) {
+            return this.handle.bind(this).apply(Object.assign(this.options, this.arguments))
+        }
     }
 
     ask(questions, callback) {
@@ -101,6 +99,8 @@ class Command {
         this.description = description;
         return this;
     }
-}
 
-module.exports = Command;
+    handle() {
+        throw new Error('Default function')
+    }
+}

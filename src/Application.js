@@ -1,5 +1,7 @@
 let fs = require('fs'),
-    Command = new require('./Command');
+    Command = require('./Command'),
+    path = require('path');
+
 module.exports = class Application {
     constructor() {
         this.commands = {};
@@ -11,22 +13,20 @@ module.exports = class Application {
             throw new Error('This must be a closure/function');
         }
 
-        let tmpCmp = new class extends Command {
+        let commandKey = commandName.split(' ')[0]
+
+        this.commands[commandKey] = new (class extends Command {
             constructor() {
                 super(commandName);
-                this.handle = func;
-                this.call = super.call;
-                this.stripTags = super.stripTags;
-                this.argument = super.argument;
-                this.option = super.option;
-                this.describe = super.describe;
                 this.signature = commandName;
             }
-        }(commandName);
 
-        this.commands[tmpCmp.name] = tmpCmp;
+            handle() {
+                func.bind(this).apply([])
+            }
+        })(commandName);
 
-        return tmpCmp;
+        return this.commands[commandKey];
     }
 
     register(directory, arrayOfCommands) {
@@ -34,14 +34,24 @@ module.exports = class Application {
             arrayOfCommands = [arrayOfCommands]
         }
 
-        arrayOfCommands.forEach(command => {
-            this.registerCommand(directory + "/" + command + ".js")
+        arrayOfCommands = arrayOfCommands.map(command => {
+            return path.join(directory, command);
+        })
+
+        let justCommandDirectories = arrayOfCommands.filter(file => fs.lstatSync(file).isDirectory()).map(
+            dir => fs.readdirSync(dir).map(file => path.join(dir, file))
+        ).reduce((thing, thing2) => { return thing.concat(thing2) });
+
+        let justCommandFiles = arrayOfCommands.filter(file => (!fs.lstatSync(file).isDirectory()));
+
+        [...new Set(justCommandFiles.concat(justCommandDirectories))].forEach(command => {
+            this.registerCommand( command)
         })
     }
 
     registerCommand(command) {
         if (!fs.lstatSync(command).isDirectory()) {
-            command = new require(command.replace(/\.js$/, ''));
+            command = require(command.replace(/\.js$/, ''));
             let cmd = new command();
             this.commands[cmd.name] = cmd
         }
@@ -58,7 +68,21 @@ module.exports = class Application {
         this.parseArgs(args);
 
         if (!this.executing) {
-            this.commands['list'].call([]);
+            let Table = require('cli-table');
+            let table = new Table({head: ["id", "name", "description"]});
+
+            let id = 0;
+            for (let command in this.commands) {
+                if (!this.commands.hasOwnProperty(command)) {
+                    continue;
+                }
+                table.push([
+                    id++,
+                    this.commands[command].signature,
+                    this.commands[command].description || ''
+                ])
+            }
+            console.log(table.toString())
             return;
         }
 
