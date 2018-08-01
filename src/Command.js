@@ -7,7 +7,9 @@ module.exports = class Command {
         this.name = '';
         this.options = {};
         this.arguments = {};
-        this.parseSignature()
+        if (signature) {
+            this.parseSignature()
+        }
     }
 
     /**

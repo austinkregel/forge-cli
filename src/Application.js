@@ -53,6 +53,7 @@ module.exports = class Application {
         if (!fs.lstatSync(command).isDirectory()) {
             command = require(command.replace(/\.js$/, ''));
             let cmd = new command();
+            cmd.parseSignature();
             this.commands[cmd.name] = cmd
         }
     }
