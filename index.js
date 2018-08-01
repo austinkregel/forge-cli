@@ -1,9 +1,7 @@
 'use strict';
-let App = require('./src/Application');
-global.ForgeCli= new App();
 
-ForgeCli.register(__dirname, [
-    './src/Commands/List'
-]);
+let App = require('./src/Application');
+
+let ForgeCli = new App();
 
 module.exports = ForgeCli;
