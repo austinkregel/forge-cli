@@ -14,15 +14,15 @@ module.exports = class Application {
         }
 
         let commandKey = commandName.split(' ')[0]
-
+        let that = this;
         this.commands[commandKey] = new (class extends Command {
             constructor() {
-                super(commandName);
+                super(that, commandName);
                 this.signature = commandName;
             }
 
             handle() {
-                func.bind(this).apply([])
+                func.bind(this).apply(this, [])
             }
         })(commandName);
 
@@ -52,7 +52,7 @@ module.exports = class Application {
     registerCommand(command) {
         if (!fs.lstatSync(command).isDirectory()) {
             command = require(command.replace(/\.js$/, ''));
-            let cmd = new command();
+            let cmd = new command(this);
             cmd.parseSignature();
             this.commands[cmd.name] = cmd
         }

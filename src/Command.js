@@ -1,15 +1,17 @@
 const inquire = require('inquirer');
-
+const chalk = require('chalk');
 module.exports = class Command {
-    constructor(signature) {
+    constructor(context, signature) {
         this.signature = signature || '';
         this.inquirer = inquire;
         this.name = '';
         this.options = {};
         this.arguments = {};
+        this.chalk = chalk;
         if (signature) {
             this.parseSignature()
         }
+        this.Application = context;
     }
 
     /**
@@ -89,8 +91,26 @@ module.exports = class Command {
         });
 
         if (this.handle) {
-            return this.handle.bind(this).apply(Object.assign(this.options, this.arguments))
+            return this.handle.apply(this)
         }
+    }
+
+    _values(obj) {
+        if (typeof obj !== 'object') {
+            return null;
+        }
+
+        if (Object.hasOwnProperty('values')) {
+            return Objet.values(obj);
+        }
+
+        let values = [];
+
+        for (let key in obj) {
+            values.push(obj[key])
+        }
+
+        return values;
     }
 
     ask(questions, callback) {
@@ -100,6 +120,22 @@ module.exports = class Command {
     describe(description){
         this.description = description;
         return this;
+    }
+
+    info(loggableText, context) {
+        console.log(this.chalk.bgGreen(this.chalk.black(loggableText)), context || '')
+    }
+
+    warning(loggableText, context) {
+        console.log(this.chalk.bgYellow(this.chalk.black(loggableText)), context || '')
+    }
+
+    danger(loggableText, context) {
+        console.log(this.chalk.bgRed(this.chalk.white(loggableText)), context || '')
+    }
+
+    log(loggableText, context) {
+        console.log(loggableText, context || '')
     }
 
     handle() {

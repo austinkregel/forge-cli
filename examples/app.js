@@ -10,6 +10,7 @@ Application.command('new {type} {name}', function() {
 
 Application.register(__dirname, [
     'Commands/Theory.js',
+    // You can register either a whole directory or a single command, or both!
     'Commands'
 ]);
 
