@@ -114,7 +114,9 @@ module.exports = class Command {
     }
 
     ask(questions, callback) {
-        inquire.prompt(questions).then(callback);
+        inquire.prompt(questions).then(callback).catch(() => {
+            this.danger('Failed to ask a question', questions);
+        })
     }
 
     describe(description){
