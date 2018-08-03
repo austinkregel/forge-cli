@@ -113,9 +113,29 @@ module.exports = class Command {
         return values;
     }
 
-    ask(questions, callback) {
-        inquire.prompt(questions).then(callback).catch(() => {
-            this.danger('Failed to ask a question', questions);
+    ask(message) {
+        return inquire.prompt({
+            type: 'input',
+            name: 'input',
+            message
+        })
+    }
+
+    confirm(message) {
+        return inquire.prompt({
+            type: 'confirm',
+            name: 'confirm',
+            message,
+            default: false
+        })
+    }
+
+    askList(message, choices) {
+        return inquire.prompt({
+            type: 'list',
+            name: 'list',
+            message,
+            choices
         })
     }
 
