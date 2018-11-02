@@ -80,3 +80,8 @@ And the url's they'll hit are http://example.com and https://example.com respect
 ### Helpers?
 
 You have full access to the [inquirer](https://github.com/SBoudrias/Inquirer.js) library via `this.inquirer` in your command's closure.
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/austinkregel/forge-cli/badge.svg?style=beer-square)](https://beerpay.io/austinkregel/forge-cli)  [![Beerpay](https://beerpay.io/austinkregel/forge-cli/make-wish.svg?style=flat-square)](https://beerpay.io/austinkregel/forge-cli?focus=wish)
